@@ -2,6 +2,7 @@ package com.kongmu373.park.entity;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.Instant;
@@ -11,6 +12,7 @@ import java.time.Instant;
 public class User {
     private Integer id;
     private String username;
+    @JsonIgnore
     private String password;
     private String avatar;
     private Instant createdAt;
@@ -19,6 +21,7 @@ public class User {
      * 是否删除
      */
     @TableLogic
+    @JsonIgnore
     private Boolean deleted;
 
     public User() {

@@ -51,6 +51,6 @@ public class UserService implements UserDetailsService {
                 .setUpdatedAt(Instant.now())
                 .setAvatar("");
         userMapper.insert(user);
-        return user.setPassword(null);
+        return user;
     }
 }
