@@ -6,9 +6,23 @@ spring:
     username: root
     password: 123
 
-# mybatis 配置内容
-mybatis:
-  config-location: classpath:db/mybatis-config.xml # 配置 MyBatis 配置文件路径
-#  mapper-locations: classpath:mapper/*.xml # 配置 Mapper XML 地址
-  type-aliases-package: com.kongmu373.park.entity # 配置数据库实体包路径
+# mybatis-plus 配置内容
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
+  global-config:
+    db-config:
+      id-type: auto # ID 主键自增
+      logic-delete-value: true # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: false # 逻辑未删除值(默认为 0)
+  mapper-locations: classpath*:db/mapper/*.xml
+  type-aliases-package: com.kongmu373.park.entity
 
+# logging
+logging:
+  level:
+    # dao 开启 debug 模式 mybatis 输入 sql
+    com:
+      kongmu373:
+        park:
+          mapper: debug

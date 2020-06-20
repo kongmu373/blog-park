@@ -1,12 +1,14 @@
 package com.kongmu373.park.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kongmu373.park.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserMapper {
-    @Select("SELECT * FROM users WHERE id = #{id}")
-    User selectById(@Param("id") Integer id);
+@Mapper
+public interface UserMapper extends BaseMapper<User> {
+    default User selectByUsername(@Param("username") String username) {
+        return selectOne(new QueryWrapper<User>().eq("username", username));
+    }
 }
