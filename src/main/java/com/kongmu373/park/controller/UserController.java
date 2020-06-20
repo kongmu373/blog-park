@@ -23,6 +23,7 @@ public class UserController {
 
     @GetMapping("/get")
     public CommonResult<User> selectById(@RequestParam("id") Integer id) {
-        return CommonResult.success(userService.selectById(id), "查找成功");
+        return CommonResult.success(userService.selectById(id), "查找成功", true);
     }
+
 }
