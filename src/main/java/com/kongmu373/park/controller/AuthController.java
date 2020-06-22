@@ -2,7 +2,6 @@ package com.kongmu373.park.controller;
 
 
 import com.kongmu373.park.common.CommonResult;
-import com.kongmu373.park.common.ValidEnum;
 import com.kongmu373.park.entity.User;
 import com.kongmu373.park.service.UserService;
 import org.springframework.dao.DuplicateKeyException;
@@ -11,8 +10,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.Map;
 
+import static com.kongmu373.park.utils.ValidUtils.validParamAndReturnCommonResult;
 import static com.kongmu373.park.utils.ValidUtils.validPassword;
 import static com.kongmu373.park.utils.ValidUtils.validUserName;
 
@@ -45,7 +44,7 @@ public class AuthController {
     public CommonResult<User> auth() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.selectByUserName(authentication.getName());
+        User user = userService.selectByUserName(authentication == null ? null : authentication.getName());
         if (user == null) {
             return CommonResult.success(null, null, false);
         }
@@ -72,27 +71,19 @@ public class AuthController {
         }
     }
 
-    private void validParamAndReturnCommonResult(ValidEnum paramValid) {
-        if (paramValid != null) {
-            throw new RuntimeException(paramValid.getMsg());
-        }
-    }
 
     @PostMapping("/login")
     public CommonResult<User> login(@RequestBody Map<String, String> params) {
         String username = params.get("username");
         String password = params.get("password");
-        UserDetails userDetails;
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password, Collections.emptyList());
         try {
-            userDetails = userService.loadUserByUsername(username);
-        } catch (UsernameNotFoundException e) {
-            return CommonResult.fail("用户不存在", null);
-        }
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), password, userDetails.getAuthorities());
-        try {
+            User user = userService.selectByUserName(username);
+            if (user == null) {
+                return CommonResult.fail("用户不存在", null);
+            }
             authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(token);
-            User user = userService.selectByUserName(username);
             return CommonResult.success(user, "登录成功", null);
         } catch (BadCredentialsException e) {
             return CommonResult.fail("密码不正确", null);
@@ -101,8 +92,8 @@ public class AuthController {
 
     @GetMapping("/logout")
     public CommonResult<User> logout() {
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.selectByUserName(name);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.selectByUserName(authentication == null ? null : authentication.getName());
         if (user == null) {
             return CommonResult.fail("用户尚未登录", null);
         }

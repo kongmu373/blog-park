@@ -9,6 +9,10 @@ public final class ValidUtils {
 
     private static final Pattern PATTERN = Pattern.compile("^[0-9a-zA-Z_\\u4e00-\\u9fa5]{1,}$");
 
+    private ValidUtils() {
+
+    }
+
     public static ValidEnum validUserName(String username) {
         if (StringUtils.isEmpty(username)) {
             return ValidEnum.USERNAME_NOT_EMPTY;
@@ -28,6 +32,14 @@ public final class ValidUtils {
         }
         if (password.length() < 6 || password.length() > 16) {
             return ValidEnum.PASSWORD_LENGTH;
+        }
+        return null;
+    }
+
+
+    public static Object validParamAndReturnCommonResult(ValidEnum paramValid) throws RuntimeException {
+        if (paramValid != null) {
+            throw new RuntimeException(paramValid.getMsg());
         }
         return null;
     }

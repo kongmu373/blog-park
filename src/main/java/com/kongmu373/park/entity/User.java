@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName(value = "users")
@@ -115,5 +116,24 @@ public class User {
                 ", updatedAt=" + updatedAt +
                 ", deleted=" + deleted +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(avatar, user.avatar) &&
+                Objects.equals(createdAt, user.createdAt) &&
+                Objects.equals(updatedAt, user.updatedAt) &&
+                Objects.equals(deleted, user.deleted);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, avatar, createdAt, updatedAt, deleted);
     }
 }
