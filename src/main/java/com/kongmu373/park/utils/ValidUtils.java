@@ -37,10 +37,9 @@ public final class ValidUtils {
     }
 
 
-    public static Object validParamAndReturnCommonResult(ValidEnum paramValid) throws RuntimeException {
+    public static void validParamAndReturnCommonResult(ValidEnum paramValid) throws RuntimeException {
         if (paramValid != null) {
             throw new RuntimeException(paramValid.getMsg());
         }
-        return null;
     }
 }
