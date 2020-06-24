@@ -2,6 +2,8 @@ package com.kongmu373.park.service;
 
 import com.kongmu373.park.entity.User;
 import com.kongmu373.park.mapper.UserMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -34,6 +37,12 @@ public class UserService implements UserDetailsService {
     public User selectByUserName(String username) {
         return userMapper.selectByUsername(username);
     }
+
+    public Optional<User> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return Optional.ofNullable(selectByUserName(authentication == null ? null : authentication.getName()));
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -59,4 +68,6 @@ public class UserService implements UserDetailsService {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         System.out.println(bCryptPasswordEncoder.encode("123456"));
     }
+
+
 }

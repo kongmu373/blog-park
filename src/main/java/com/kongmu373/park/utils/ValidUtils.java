@@ -37,9 +37,19 @@ public final class ValidUtils {
     }
 
 
-    public static void validParamAndReturnCommonResult(ValidEnum paramValid) throws RuntimeException {
+    public static void validParamAndReturnResult(ValidEnum paramValid) throws RuntimeException {
         if (paramValid != null) {
             throw new RuntimeException(paramValid.getMsg());
         }
+    }
+
+    public static ValidEnum validBlog(String title, String content) {
+        if(StringUtils.isBlank(title) || title.length() > 100) {
+            return ValidEnum.TITLE_VALID;
+        }
+        if(StringUtils.isBlank(content) || content.length() > 10000) {
+            return ValidEnum.CONTENT_VALID;
+        }
+        return null;
     }
 }

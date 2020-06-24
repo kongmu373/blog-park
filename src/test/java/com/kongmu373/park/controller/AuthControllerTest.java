@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.kongmu373.park.utils.TestUtils.testGet;
 import static com.kongmu373.park.utils.TestUtils.testPost;
@@ -45,13 +46,13 @@ class AuthControllerTest {
 
     @Test
     void testAuthNotLogin() throws Exception {
-        when(userService.selectByUserName(null)).thenReturn(null);
+        when(userService.getCurrentUser()).thenReturn(Optional.empty());
         testGet(mvc, "/auth", "\"login\":false");
     }
 
     @Test
     void testLogoutNotLogin() throws Exception {
-        when(userService.selectByUserName(null)).thenReturn(null);
+        when(userService.getCurrentUser()).thenReturn(Optional.empty());
         testGet(mvc, "/auth/logout", "用户尚未登录");
     }
 
@@ -61,8 +62,10 @@ class AuthControllerTest {
         Map<String, String> params = new HashMap<>();
         params.put("username", "user");
         params.put("password", "pwd");
-        when(userService.selectByUserName("user")).thenReturn(new User().setId(1).setUsername("user").setPassword("pwd"));
+        User user = new User().setId(1).setUsername("user").setPassword("pwd");
+        when(userService.selectByUserName("user")).thenReturn(user);
         testPost(mvc, "/auth/login", params, "\"msg\":\"登录成功\"");
+        when(userService.getCurrentUser()).thenReturn(Optional.ofNullable(user));
         testGet(mvc, "/auth", "\"data\":{\"id\":1,\"username\":\"user\"},\"login\":true");
         testGet(mvc, "/auth/logout", "注销成功");
     }

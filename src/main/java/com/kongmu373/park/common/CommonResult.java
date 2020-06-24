@@ -25,34 +25,22 @@ public class CommonResult<T> implements Serializable {
      */
     private T data;
 
-    /**
-     * 是否登录
-     */
-    private Boolean isLogin;
+    protected CommonResult() {
 
-    public Boolean getLogin() {
-        return isLogin;
     }
 
-    public void setLogin(Boolean login) {
-        isLogin = login;
+    protected CommonResult(String status, String msg, T data) {
+        this.status = status;
+        this.msg = msg;
+        this.data = data;
     }
 
-    public static <T> CommonResult<T> success(T data, String message, Boolean isLogin) {
-        CommonResult<T> result = new CommonResult<>();
-        result.status = SUCCESS;
-        result.data = data;
-        result.msg = message;
-        result.isLogin = isLogin;
-        return result;
+    public static <T> CommonResult<T> success(String msg, T data) {
+        return new CommonResult<>(SUCCESS, msg, data);
     }
 
-    public static <T> CommonResult<T> fail(String message, Boolean isLogin) {
-        CommonResult<T> result = new CommonResult<>();
-        result.status = FAIL;
-        result.msg = message;
-        result.isLogin = isLogin;
-        return result;
+    public static <T> CommonResult<T> fail(String msg) {
+        return new CommonResult<>(FAIL, msg, null);
     }
 
     public String getStatus() {

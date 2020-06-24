@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kongmu373.park.mapper.BlogMapper">
+    <select id="selectListByUserId" resultMap="blog">
+        select `blogs`.id blog_id,
+        `blogs`.title blog_title,
+        `blogs`.description blog_description,
+        `blogs`.content blog_content,
+        `blogs`.created_at blog_created_at,
+        `blogs`.updated_at blog_updated_at,
+        `users`.id user_id,
+        `users`.username user_username,
+        `users`.avatar user_avatar,
+        `users`.created_at user_created_at,
+        `users`.updated_at user_updated_at
+        from `blogs`
+        left join `users` on `blogs`.user_id = `users`.id
+        where `blogs`.deleted = false
+        <if test="user_id != null">
+
+            and `users`.id = #{user_id}
+        </if>
+        limit #{offset}, #{limit}
+    </select>
+    <select id="selectByIdWithUser" resultMap="blog">
+select `blogs`.id    blog_id,
+       `blogs`.title blog_title,
+       `blogs`.description blog_description,
+       `blogs`.content blog_content,
+       `blogs`.created_at blog_created_at,
+       `blogs`.updated_at blog_updated_at,
+       `users`.id user_id,
+       `users`.username user_username,
+       `users`.avatar user_avatar,
+       `users`.created_at user_created_at,
+       `users`.updated_at user_updated_at
+from `blogs`
+         left join `users` on `blogs`.user_id = `users`.id
+where `blogs`.id = #{blog_id} and `blogs`.deleted = false
+    </select>
+
+    <resultMap id="blog" type="com.kongmu373.park.entity.BlogVo">
+        <id property="id" column="blog_id"/>
+        <result property="title" column="blog_title"/>
+        <result property="description" column="blog_description"/>
+        <result property="content" column="blog_content"/>
+        <result property="updatedAt" column="blog_updated_at"/>
+        <result property="createdAt" column="blog_created_at"/>
+        <association property="user" javaType="com.kongmu373.park.entity.User">
+            <id property="id" column="user_id"/>
+            <result property="username" column="user_username"/>
+            <result property="avatar" column="user_avatar"/>
+            <result property="updatedAt" column="user_updated_at"/>
+            <result property="createdAt" column="user_created_at"/>
+        </association>
+    </resultMap>
+</mapper>
