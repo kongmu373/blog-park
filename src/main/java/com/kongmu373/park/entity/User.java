@@ -5,12 +5,13 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName(value = "users")
-public class User {
+public class User implements Serializable {
     private Integer id;
     private String username;
     @JsonIgnore
@@ -38,8 +39,9 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public void setId(Integer id) {
+    public User setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     public Boolean getDeleted() {
