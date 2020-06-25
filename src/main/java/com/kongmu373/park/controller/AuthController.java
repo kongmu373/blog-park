@@ -28,6 +28,7 @@ import static com.kongmu373.park.utils.ValidUtils.validUserName;
 
 public class AuthController {
 
+
     private UserService userService;
 
     private AuthenticationManager authenticationManager;

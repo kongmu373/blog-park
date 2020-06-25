@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk8:jdk8u232-b09-ubuntu-slim
+FROM java:openjdk-8u111-alpine
 
 RUN mkdir /app
 
