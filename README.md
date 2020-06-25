@@ -24,6 +24,7 @@
 
 ## Installation
 + 运行Application类方案:
+ 
  clone 项目至本地目录：
 
 ```shell
@@ -45,7 +46,7 @@ mvn flyway:clean && mvn flyway:migrate
 ```
 
 
-+ 另一种方案(纯Docker)
++ 另一种方案
 
 创建 `blog-park`镜像
 
