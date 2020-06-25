@@ -23,13 +23,14 @@
 + docker
 
 ## Installation
-+ clone 项目至本地目录：
++ 运行Application类方案:
+ clone 项目至本地目录：
 
 ```shell
 git clone https://github.com/NervousOrange/Multiplayer-Online-Blog-Platform.git
 ```
 
-+ 从 Docker 启动 MySQL 数据库：
+ 从 Docker 启动 MySQL 数据库：
     + [Docker 下载地址](https://www.docker.com/)
     + 如果需要持久化数据需要配置 -v 磁盘文件映射
 
@@ -37,14 +38,14 @@ git clone https://github.com/NervousOrange/Multiplayer-Online-Blog-Platform.git
 docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123 -d mysql:5.7.27
 ```
 
-+ 使用 IDEA 打开项目，刷新 Maven，再使用开源数据库迁移工具 Flyway 完成自动建表工作：
+ 使用 IDEA 打开项目，刷新 Maven，再使用开源数据库迁移工具 Flyway 完成自动建表工作：
 
 ```shell
 mvn flyway:clean && mvn flyway:migrate
 ```
 
 
-+ 另一种方案
++ 另一种方案(纯Docker)
 
 创建 `blog-park`镜像
 
