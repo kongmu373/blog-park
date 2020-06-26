@@ -29,9 +29,9 @@ def normalCIBuild(String version) {
 
     stage('docker build')
 
-    sh("docker build . -t 45.136.244.36:5000/blogVo-park:${version}")
+    sh("docker build . -t 45.32.50.154:5000/blog-park:${version}")
 
-    sh("docker push 45.136.244.36:5000/blogVo-park:${version}")
+    sh("docker push 45.32.50.154:5000/blog-park:${version}")
 
     stage('deploy')
 
@@ -41,7 +41,7 @@ def normalCIBuild(String version) {
 }
 
 def deployVersion(String version) {
-    sh "ssh root@45.136.244.36 'docker rm -f xdml && docker run --name xdml -d -p 8080:8080 45.136.244.36:5000/blogVo-park:${version}'"
+    sh "ssh root@45.32.50.154 'docker rm -f xdml && docker run --name xdml -d -p 8080:8080 45.32.50.154:5000/blog-park:${version}'"
 }
 
 def setScmPollStrategyAndBuildTypes(List buildTypes) {
@@ -53,8 +53,8 @@ def setScmPollStrategyAndBuildTypes(List buildTypes) {
 }
 
 def rollback() {
-    def dockerRegistryHost = "http://45.136.244.36:5000";
-    def getAllTagsUri = "/v2/blogVo-park/tags/list";
+    def dockerRegistryHost = "http://45.32.50.154:5000";
+    def getAllTagsUri = "/v2/blog-park/tags/list";
 
     def responseJson = new URL("${dockerRegistryHost}${getAllTagsUri}")
             .getText(requestProperties: ['Content-Type': "application/json"]);
